@@ -10,11 +10,13 @@ find_package(ament_cmake REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(Eigen3 REQUIRED)
-find_library(NATNET_LIB PATHS ${CMAKE_CURRENT_LIST_DIR}/dependecies/NatNetSDK4.1/lib)
+find_library(NATNET_LIB NatNet PATHS ${CMAKE_CURRENT_LIST_DIR}/dependencies/NatNetSDK4.1/lib)
 
 set(NORA_SOURCES
   ${CMAKE_CURRENT_LIST_DIR}/src/ConfigManager.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/main.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/OptitrackStateFetcher.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/RobotStateTracker.cpp
 )
 
 if(BUILD_TESTING)
@@ -38,7 +40,7 @@ include_directories(${PROJECT_NAME}
 )
 
 ament_target_dependencies(${PROJECT_NAME} rclcpp Eigen3)
-target_link_libraries(${PROJECT_NAME} yaml-cpp)
+target_link_libraries(${PROJECT_NAME} yaml-cpp ${NATNET_LIB})
 
 install(TARGETS ${PROJECT_NAME} DESTINATION lib/${PROJECT_NAME})
 ament_package()

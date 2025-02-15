@@ -22,6 +22,7 @@ void ConfigManager::loadConfig(const std::string& filename)
         mConfig.robot_name = yamlConfig["robot"]["name"].as<std::string>();
         mConfig.robot_ip = yamlConfig["robot"]["ip_address"].as<std::string>();
         mConfig.rigid_body_id = yamlConfig["robot"]["rigid_body_id"].as<int>();
+        mConfig.mStateTrackerConfig.mNetwork.Local.IP = mConfig.robot_ip; 
 
         // Parse State Vector
         mConfig.position = yamlConfig["state_vector"]["position"].as<bool>();
@@ -35,18 +36,23 @@ void ConfigManager::loadConfig(const std::string& filename)
         mConfig.state_topic = yamlConfig["topics"]["state"].as<std::string>();
 
         // Parse Motion Capture Settings
-        mConfig.motion_capture_system = yamlConfig["motion_capture_system"].as<std::string>();
-        mConfig.update_rate = yamlConfig["update_rate"].as<int>();
+        mConfig.mStateTrackerConfig.mInterface = yamlConfig["motion_capture_system"].as<std::string>();
+        mConfig.mStateTrackerConfig.mUpdateRate = yamlConfig["update_rate"].as<int>();
 
         // Parse Network Configuration
-        if (mConfig.motion_capture_system == "optitrack") {
-            mConfig.optitrack_multicast_address = yamlConfig["network"]["optitrack"]["multicast_address"].as<std::string>();
-            mConfig.optitrack_command_port = yamlConfig["network"]["optitrack"]["command_port"].as<int>();
-            mConfig.optitrack_data_port = yamlConfig["network"]["optitrack"]["data_port"].as<int>();
-        } else if (mConfig.motion_capture_system == "vicon") {
-            mConfig.vicon_server_address = yamlConfig["network"]["vicon"]["server_address"].as<std::string>();
-            mConfig.vicon_port = yamlConfig["network"]["vicon"]["port"].as<int>();
+        if (mConfig.mStateTrackerConfig.mInterface == "optitrack") {
+            mConfig.mStateTrackerConfig.mNetwork.Server.IP = yamlConfig["network"]["optitrack"]["server_address"].as<std::string>(); 
+            mConfig.mStateTrackerConfig.mNetwork.Multicast.IP = yamlConfig["network"]["optitrack"]["multicast_address"].as<std::string>();
+            mConfig.mStateTrackerConfig.mNetwork.Multicast.CmdPort = yamlConfig["network"]["optitrack"]["command_port"].as<int>();
+            mConfig.mStateTrackerConfig.mNetwork.Multicast.DataPort = yamlConfig["network"]["optitrack"]["data_port"].as<int>();
+        } else if (mConfig.mStateTrackerConfig.mInterface == "vicon") {
+            mConfig.mStateTrackerConfig.mNetwork.Server.IP = yamlConfig["network"]["vicon"]["server_address"].as<std::string>();
+            mConfig.mStateTrackerConfig.mNetwork.Multicast.DataPort = yamlConfig["network"]["vicon"]["port"].as<int>();
+            mConfig.mStateTrackerConfig.mNetwork.Multicast.CmdPort = mConfig.mStateTrackerConfig.mNetwork.Multicast.DataPort; 
         }
+
+        mConfig.mStateTrackerConfig.mNetwork.Server.CmdPort = mConfig.mStateTrackerConfig.mNetwork.Multicast.CmdPort;
+        mConfig.mStateTrackerConfig.mNetwork.Server.DataPort = mConfig.mStateTrackerConfig.mNetwork.Multicast.DataPort;
 
         printConfig();
     } catch (const YAML::Exception& e) {
@@ -71,19 +77,20 @@ void ConfigManager::printConfig() const {
     LOGD << "ROS Topics:";
     LOGD << "  State Topic: " << mConfig.state_topic;
     LOGD << "--------------------------------";
-    LOGD << "Motion Capture System: " << mConfig.motion_capture_system;
-    LOGD << "Update Rate: " << mConfig.update_rate << " Hz";
+    LOGD << "Motion Capture System: " << mConfig.mStateTrackerConfig.mInterface;
+    LOGD << "Update Rate: " << mConfig.mStateTrackerConfig.mUpdateRate << " Hz";
     LOGD << "--------------------------------";
     LOGD << "Network Configuration:";
-    if (mConfig.motion_capture_system == "optitrack") {
+    if (mConfig.mStateTrackerConfig.mInterface == "optitrack") {
         LOGD << "  OptiTrack:";
-        LOGD << "    Multicast Address: " << mConfig.optitrack_multicast_address;
-        LOGD << "    Command Port: " << mConfig.optitrack_command_port;
-        LOGD << "    Data Port: " << mConfig.optitrack_data_port;
-    } else if (mConfig.motion_capture_system == "vicon") {
+        LOGD << "    Server Address: " << mConfig.mStateTrackerConfig.mNetwork.Server.IP; 
+        LOGD << "    Multicast Address: " << mConfig.mStateTrackerConfig.mNetwork.Multicast.IP;
+        LOGD << "    Command Port: " << mConfig.mStateTrackerConfig.mNetwork.Multicast.CmdPort;
+        LOGD << "    Data Port: " << mConfig.mStateTrackerConfig.mNetwork.Multicast.DataPort;
+    } else if (mConfig.mStateTrackerConfig.mInterface == "vicon") {
         LOGD << "  Vicon:";
-        LOGD << "    Server Address: " << mConfig.vicon_server_address;
-        LOGD << "    Port: " << mConfig.vicon_port;
+        LOGD << "    Server Address: " << mConfig.mStateTrackerConfig.mNetwork.Multicast.IP;
+        LOGD << "    Port: " << mConfig.mStateTrackerConfig.mNetwork.Multicast.DataPort;
     }
     LOGD << "================================";
 }

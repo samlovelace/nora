@@ -2,10 +2,9 @@
 #define ROBOTSTATETRACKER_H
 
 #include "IStateFetcher.h"
-//#include "Configurations.h"
-//#include "ConfigurationManager.h"
 #include <memory>
 #include <thread> 
+#include "Config.h"
 
 class RobotStateTracker
 {
@@ -32,7 +31,7 @@ public:
 
 private:
     // polymorphic state fetcher interface so we arent tied to optiTrack
-    std::shared_ptr<IStateFetcher> mStateFetcher; // state fetcher interface class 
+    std::shared_ptr<IStateFetcher> mStateFetcher; // state fetcher interface class  
     StateTrackerConfig mConfig; 
 
     bool mDoStateTracking;

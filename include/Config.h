@@ -3,6 +3,24 @@
 
 #include <string>
 
+struct SocketConfig {
+    std::string IP;
+    int CmdPort;
+    int DataPort;
+};
+
+struct NetworkConfig {
+    SocketConfig Server;
+    SocketConfig Local;
+    SocketConfig Multicast;
+};
+
+struct StateTrackerConfig {
+    std::string mInterface;
+    int mUpdateRate;
+    NetworkConfig mNetwork;   
+};
+
 struct Config {
     std::string robot_name;
     std::string robot_ip;
@@ -17,15 +35,8 @@ struct Config {
 
     std::string state_topic;
 
-    std::string motion_capture_system;
-    int update_rate;
+    StateTrackerConfig mStateTrackerConfig; 
 
-    std::string optitrack_multicast_address;
-    int optitrack_command_port;
-    int optitrack_data_port;
-
-    std::string vicon_server_address;
-    int vicon_port;
 };
 
 #endif  // CONFIG_H

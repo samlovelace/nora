@@ -2,6 +2,7 @@
 #include <cstdio> 
 #include "Logger.h"
 #include "ConfigManager.h"
+#include "RobotStateTracker.h"
 
 int main()
 {
@@ -9,5 +10,6 @@ int main()
 	
 	createLogger();
 	ConfigManager::getInstance()->loadConfig(configFilePath); 
-	
+
+	RobotStateTracker robot;
 }

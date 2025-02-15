@@ -17,6 +17,9 @@ fi
 echo "📦 Sourcing workspace setup..."
 source install/setup.bash
 
+# export the library path 
+export LD_LIBRARY_PATH=~/dev/cpp/abv/nora_ws/src/nora/dependencies/NatNetSDK4.1/lib:$LD_LIBRARY_PATH
+
 # Run the ROS2 node
 echo "🚀 Running nora node..."
 ros2 run nora nora
