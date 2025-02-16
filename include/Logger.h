@@ -75,4 +75,22 @@ void createLogger() {
     //PLOG_INFO << datalogFileName << " created";
 }
 
+// Signal handler function
+void signalHandler(int signal) {
+
+    LOGD  << "\n" << "\t\t"
+	  R"(_________________________
+		|                       |
+		|   SHUTTING DOWN...    |
+		|_______________________|
+               __   /
+              / o) /
+     _.----._/ /
+    /         /
+ __/ (  | (  |
+/__.-'|_|--|_|
+)";
+    exit(0); // Exit the program
+}
+
 #endif // LOGGER_H
