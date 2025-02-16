@@ -7,9 +7,10 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(yaml-cpp REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(nora_idl REQUIRED)
 find_package(Eigen3 REQUIRED)
+find_package(yaml-cpp REQUIRED)
 find_library(NATNET_LIB NatNet PATHS ${CMAKE_CURRENT_LIST_DIR}/dependencies/NatNetSDK4.1/lib)
 
 set(NORA_SOURCES
@@ -39,7 +40,7 @@ include_directories(${PROJECT_NAME}
   ${CMAKE_CURRENT_LIST_DIR}/dependencies/plog/plog-master/include
 )
 
-ament_target_dependencies(${PROJECT_NAME} rclcpp Eigen3)
+ament_target_dependencies(${PROJECT_NAME} rclcpp Eigen3 nora_idl)
 target_link_libraries(${PROJECT_NAME} yaml-cpp ${NATNET_LIB})
 
 install(TARGETS ${PROJECT_NAME} DESTINATION lib/${PROJECT_NAME})

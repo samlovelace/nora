@@ -5,6 +5,7 @@
 #include <memory>
 #include <thread> 
 #include "Config.h"
+#include "nora_idl/msg/robot_state.hpp"
 
 class RobotStateTracker
 {
@@ -19,7 +20,7 @@ public:
         NUM_TYPES
     };
 
-    void stateTrackerLoop(); 
+    void run(); 
 
     Eigen::Vector3d getCurrentPose() { std::lock_guard<std::mutex> lock(mCurrentPoseMutex); return mCurrentPose; }
     Eigen::Vector3d getCurrentVelocity() {std::lock_guard<std::mutex> lock(mCurrentVelocityMutex); return mCurrentVelocity; }
@@ -32,7 +33,7 @@ public:
 private:
     // polymorphic state fetcher interface so we arent tied to optiTrack
     std::shared_ptr<IStateFetcher> mStateFetcher; // state fetcher interface class  
-    StateTrackerConfig mConfig; 
+    Config mConfig; 
 
     bool mDoStateTracking;
 
@@ -49,6 +50,8 @@ private:
 
     RobotStateTracker::FetcherType toEnum(std::string aTrackerType);
     void setCurrentState(const Eigen::VectorXd& aState) { std::scoped_lock lock(mCurrentStateMutex); mCurrentState = aState; }
+
+    nora_idl::msg::RobotState toIDL(Eigen::Matrix<double, 13, 1> aState); 
 
 };
 #endif // RobotStateTracker_H

@@ -16,14 +16,14 @@ public:
     ~OptitrackStateFetcher() override; 
 
     bool init() override; 
-    Eigen::Matrix<double, 6, 1> fetchState() override; 
+    Eigen::Matrix<double, 13, 1> fetchState() override; 
 
-    void setLatestState(Eigen::Matrix<double, 6, 1> aLatestState) {std::lock_guard<std::mutex> lock(mStateMutex); mLatestState = aLatestState; }
+    void setLatestState(Eigen::Matrix<double, 13, 1> aLatestState) {std::lock_guard<std::mutex> lock(mStateMutex); mLatestState = aLatestState; }
 
 private:
     std::unique_ptr<NatNetClient> mNatNetClient;
     NetworkConfig mConfig; 
-    Eigen::Matrix<double, 6, 1> mLatestState; 
+    Eigen::Matrix<double, 13, 1> mLatestState; 
     int32_t mID; 
 
     std::mutex mStateMutex; 
@@ -33,6 +33,8 @@ private:
 
     // helper/debug function to print connection info for optitrack
     void printConnectionInfo(); 
+
+    void dummyState(); 
 };
 #endif //OPTITRACKSTATEFETCHER_H
     

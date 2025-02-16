@@ -12,7 +12,7 @@ state_vector:
   angular_acceleration: false # Include angular acceleration
 
 topics:
-  state: "/robot_state"
+  state: "robot_state" # topic name
 
 motion_capture_system: "optitrack" # Options: "optitrack" or "vicon"
 update_rate: 10 # Hz

@@ -5,7 +5,7 @@ cd ~/dev/cpp/abv/nora_ws || { echo "ROS2 workspace not found!"; exit 1; }
 
 # Build the package
 echo "🔧 Building NORA (Navigation using Optitrack for Robot Autonomy) ..."
-colcon build --packages-select nora
+colcon build --packages-select nora nora_idl
 
 # Check if the build succeeded
 if [ $? -ne 0 ]; then

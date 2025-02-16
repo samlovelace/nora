@@ -5,12 +5,26 @@
 OptitrackStateFetcher::OptitrackStateFetcher(NetworkConfig aConfig) : 
         mNatNetClient(nullptr), mConfig(aConfig), mID(1)
 {
-
+    ////// HACK FOR TESTING 
+    dummyState();  
 }
 
 OptitrackStateFetcher::~OptitrackStateFetcher()
 {
     
+}
+
+void OptitrackStateFetcher::dummyState()
+{
+    Eigen::Matrix<double, 13, 1> state;
+    for(int j = 0; j < 12; j++)
+    {
+        state[j] = 0.0;
+    }
+
+    LOGD << "state: " << state; 
+    setLatestState(state);
+
 }
 
 bool OptitrackStateFetcher::init() 
@@ -58,7 +72,7 @@ bool OptitrackStateFetcher::init()
     return true; 
 }
 
-Eigen::Matrix<double, 6, 1> OptitrackStateFetcher::fetchState()
+Eigen::Matrix<double, 13, 1> OptitrackStateFetcher::fetchState()
 {
     std::lock_guard<std::mutex> lock(mStateMutex); 
     return mLatestState; 
@@ -72,17 +86,23 @@ void OptitrackStateFetcher::frameRecvdCallback(sFrameOfMocapData* data, void* pU
     {
         if(data->RigidBodies[i].ID == mID)
         {
+            ////////// TODO: Dummy values for most of these, implement actual calcuation
+            Eigen::Matrix<double, 13, 1> state;
+            for(int j = 0; j < 12; j++)
+            {
+                state[j] = 0.0;
+            }
+
             auto rb = data->RigidBodies[i]; 
             
-            // take the xyz
-            Eigen::Matrix<double, 6, 1> state; 
+            // take the xyz 
             state[0] = rb.x; 
             state[1] = rb.y; 
             state[2] = rb.z; 
 
             // convert the quaternion to Euler angles
             Eigen::Quaternion q(rb.qw, rb.qx, rb.qy, rb.qz); 
-            q.normalize(); 
+            q.normalize();
 
             Eigen::Matrix3f rotationMatrix = q.toRotationMatrix(); 
             Eigen::Vector3f angles = rotationMatrix.eulerAngles(2, 1, 0); 
