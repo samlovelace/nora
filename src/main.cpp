@@ -20,4 +20,6 @@ int main()
 
 	RobotStateTracker robot;
 	robot.run(); 
+	
+	rclcpp::shutdown(); 
 }

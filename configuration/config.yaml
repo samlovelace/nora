@@ -14,7 +14,7 @@ state_vector:
 topics:
   state: "robot_state" # topic name
 
-motion_capture_system: "optitrack" # Options: "optitrack" or "vicon"
+motion_capture_system: "optitrack" # Options: "optitrack"
 update_rate: 10 # Hz
 
 network:

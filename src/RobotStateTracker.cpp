@@ -77,6 +77,7 @@ void RobotStateTracker::run()
 
         LOGD << "Fetching robot state..."; 
         Eigen::Matrix<double, 13,1> state = mStateFetcher->fetchState();   
+        // TODO: log state to file (timestamp rigidBodyId x y z ...)
 
         statePublisher->publish(toIDL(state)); 
 
@@ -114,15 +115,21 @@ nora_idl::msg::RobotState RobotStateTracker::toIDL(Eigen::Matrix<double, 13, 1> 
     vel.y = aState[4]; 
     vel.z = aState[5];
     
+    // quaternion
     quat.w = aState[6]; 
     quat.x = aState[7]; 
     quat.y = aState[8]; 
     quat.z = aState[9];
 
-    //TODO: convert EulerToQuat 
-    eul.roll = 46.0; 
-    eul.pitch = 69.0; 
-    eul.yaw = 42.0;
+    // convert quaternion to Euler (ZYX)
+    Eigen::Quaternionf q(aState[6], aState[7], aState[8], aState[9]);
+    Eigen::Matrix3f rotationMatrix = q.toRotationMatrix(); 
+    Eigen::Vector3f angles = rotationMatrix.eulerAngles(2, 1, 0); 
+
+    // Euler angles
+    eul.roll  = (double)angles[0]; 
+    eul.pitch = (double)angles[1]; 
+    eul.yaw   = (double)angles[2];
 
     //angular_velocity
     ang_vel.x = aState[10]; 

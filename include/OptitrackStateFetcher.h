@@ -24,9 +24,12 @@ private:
     std::unique_ptr<NatNetClient> mNatNetClient;
     NetworkConfig mConfig; 
     Eigen::Matrix<double, 13, 1> mLatestState; 
+    Eigen::Matrix<double, 13,1> mPrevState; 
     int32_t mID; 
 
     std::mutex mStateMutex; 
+
+    std::chrono::steady_clock::time_point mPrevRecvdTime; 
     
     // callback function when frame is recvd
     void frameRecvdCallback(sFrameOfMocapData* data, void* pUserData);

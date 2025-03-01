@@ -78,10 +78,11 @@ Eigen::Matrix<double, 13, 1> OptitrackStateFetcher::fetchState()
     return mLatestState; 
 }
 
-
+// TODO: calculate lin/ang velocity
 void OptitrackStateFetcher::frameRecvdCallback(sFrameOfMocapData* data, void* pUserData)
 {
-    //TODO: put the robot's optitrack ID in a config file
+    auto dt = std::chrono::steady_clock::now() - mPrevRecvdTime; 
+
     for(size_t i = 0; i < data->nRigidBodies; i++)
     {
         if(data->RigidBodies[i].ID == mID)
@@ -93,25 +94,44 @@ void OptitrackStateFetcher::frameRecvdCallback(sFrameOfMocapData* data, void* pU
                 state[j] = 0.0;
             }
 
+            // rigid body data from OptiTrack
             auto rb = data->RigidBodies[i]; 
             
-            // take the xyz 
+            // position 
             state[0] = rb.x; 
             state[1] = rb.y; 
             state[2] = rb.z; 
 
-            // convert the quaternion to Euler angles
-            Eigen::Quaternion q(rb.qw, rb.qx, rb.qy, rb.qz); 
+            // linear velocity, derivative approximation 
+            for(int i = 0; i <2; i++)
+            {
+                state[i+3] = (state[i] - mPrevState[i]) / dt.count(); 
+            }
+
+            // Quaternion
+            Eigen::Quaterniond q(rb.qw, rb.qx, rb.qy, rb.qz); 
             q.normalize();
 
-            Eigen::Matrix3f rotationMatrix = q.toRotationMatrix(); 
-            Eigen::Vector3f angles = rotationMatrix.eulerAngles(2, 1, 0); 
+            // quaternion in core state vector
+            state[6] = q.w();  
+            state[7] = q.x(); 
+            state[8] = q.y(); 
+            state[9] = q.z(); 
 
-            state[3] = (double)angles[0]; 
-            state[4] = (double)angles[1]; 
-            state[5] = (double)angles[2]; 
+            // angular velocity
+            // previous quaternion
+            Eigen::Quaterniond prev(mPrevState[6], mPrevState[7], mPrevState[8], mPrevState[9]); 
+            Eigen::Quaterniond qDelta = q * prev.inverse();
+            Eigen::Vector3d angularVelocity = 2.0 * qDelta.vec() / dt.count(); 
 
+            state[10] = angularVelocity.x(); 
+            state[11] = angularVelocity.y(); 
+            state[12] = angularVelocity.z(); 
+
+            // set latest state and update previous values
             setLatestState(state); 
+            mPrevState = state; 
+            mPrevRecvdTime = std::chrono::steady_clock::now(); 
         }
     }
 }
