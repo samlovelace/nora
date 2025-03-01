@@ -3,14 +3,6 @@ robot:
   ip_address: "192.168.0.15"
   rigid_body_id: 1
 
-state_vector:
-  position: true # Include X, Y, Z position
-  velocity: true # Include linear velocity
-  acceleration: false # Include linear acceleration
-  orientation: true # Include quaternion (qx, qy, qz, qw)
-  angular_velocity: true # Include angular velocity
-  angular_acceleration: false # Include angular acceleration
-
 topics:
   state: "robot_state" # topic name
 
@@ -23,6 +15,3 @@ network:
     multicast_address: "239.255.42.99" # Default OptiTrack multicast IP
     command_port: 1510
     data_port: 1511
-  vicon:
-    server_address: "192.168.10.1" # Replace with actual Vicon server IP
-    port: 801
