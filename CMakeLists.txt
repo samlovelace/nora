@@ -44,4 +44,6 @@ ament_target_dependencies(${PROJECT_NAME} rclcpp Eigen3 nora_idl)
 target_link_libraries(${PROJECT_NAME} yaml-cpp ${NATNET_LIB})
 
 install(TARGETS ${PROJECT_NAME} DESTINATION lib/${PROJECT_NAME})
+install(DIRECTORY configuration/ DESTINATION share/nora)
+install(DIRECTORY dependencies/NatNetSDK4.1/lib DESTINATION share/nora)
 ament_package()

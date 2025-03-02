@@ -1,2 +1,44 @@
 build/**
 .vscode/**
+.obj*/**
+
+# 🔹 Ignore all ROS 2 and colcon build artifacts
+build/
+install/
+log/
+
+# 🔹 Ignore temporary and system-specific files
+*.swp
+*.bak
+*.tmp
+*.log
+.DS_Store
+*.pyc
+__pycache__/
+
+# 🔹 Ignore generated Debian build artifacts
+*.deb
+*.changes
+*.dsc
+*.tar.gz
+*.buildinfo
+*.build
+debian/files
+debian/*.substvars
+debian/*.log
+debian/.debhelper/
+debian/ros-humble-nora
+
+# 🔹 Ignore bloom-generated Debian files (which should be re-generated each build)
+#debian/
+
+# 🔹 Keep essential Debian packaging files
+!debian/control
+!debian/rules
+!debian/changelog
+!debian/compat
+!debian/copyright
+!debian/source/format
+
+
+
