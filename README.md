@@ -15,8 +15,6 @@ NORA is a simple, configurable and resuable software module capable of retreivin
 
 ## Installation
 
-NOTE: these are the manual steps for compiling from source. I am looking at how to package things nicely into a debian.
-
 1. **Prerequisites**:
 
    - ROS2 Humble
@@ -25,7 +23,23 @@ NOTE: these are the manual steps for compiling from source. I am looking at how 
    - nora_idl
 
 2. **Steps**:
-   - Step-by-step instructions to install and set up.
+
+   Create a workspace and clone this repo in the src directory of that workspace such that the folder structure is
+
+```sh
+nora_ws
+   |── src
+        │── nora
+        │── nora_idl
+```
+
+Change directories to the nora package and run the script to build and run NORA
+
+```sh
+$ cd nora
+$ chmod +x ./nora.sh
+$ ./nora.sh
+```
 
 ## Usage
 
@@ -37,3 +51,14 @@ To build and run NORA
 $ chmod +x ./nora.sh
 $ ./nora.sh
 ```
+
+To build debians for NORA and NORA_IDL, first ensure the CHANGELOG file is up to date with the latest version number.
+Then, change directories to the nora package and run
+
+```sh
+$ chmod +x ./debians.sh
+$ ./debians.sh 0.0.2
+```
+
+where 0.0.2 needs to match the latest version number in the CHANGELOG.rst file. NOTE: this requires that the nora_idl package maintain the same version
+as the main nora pkg.

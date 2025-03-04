@@ -1,12 +1,5 @@
 #!/bin/bash
 
-#NOTE: There is an issue with this script that will cause it not to work on the first run.
-# You must first manually run:
-# bloom-generate rosdebian --os-version ubuntu --os-name jammy --ros-distro humble
-# and then: 
-# fakeroot debian/rules binary
-# and ensure the .obj-x86* folder is created. For some reason, that part doesnt work when running this script
-
 # Set workspace path (modify if needed)
 WORKSPACE=~/dev/cpp/abv/nora_ws
 
@@ -64,6 +57,7 @@ echo "🛠 Updating package.xml version for nora_idl..."
 update_package_xml_version "$WORKSPACE/src/nora_idl"
 
 echo "🛠 Generating Debian package for nora_idl..."
+mkdir -p "$WORKSPACE/src/nora_idl/.obj-x86_64-linux-gnu"
 cd $WORKSPACE/src/nora_idl
 bloom-generate rosdebian --os-name ubuntu --os-version jammy --ros-distro humble
 
@@ -93,6 +87,7 @@ echo "🛠 Updating package.xml version for nora..."
 update_package_xml_version "$WORKSPACE/src/nora"
 
 echo "🛠 Generating Debian package for nora..."
+mkdir -p "$WORKSPACE/src/nora/.obj-x86_64-linux-gnu"
 cd $WORKSPACE/src/nora
 bloom-generate rosdebian --os-name ubuntu --os-version jammy --ros-distro humble
 
