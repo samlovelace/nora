@@ -2,7 +2,7 @@
 
 ## Description
 
-NORA is a simple, configurable and resuable module capable of retreiving rigid body state data from Optitrack and publishing it over DDS via ROS2. It provides a custom message interface (nora_idl) to allow for
+NORA is a simple, configurable and resuable module capable of retreiving rigid body state data from Optitrack and publishing it over DDS via ROS2. It provides a custom message interface (nora_idl) to allow other modules to subscribe to the state data.
 
 ## Table of Contents
 
