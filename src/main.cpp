@@ -11,7 +11,7 @@ int main()
 {
     std::signal(SIGINT, signalHandler); 
 	//std::string configFilePath = "../../configuration/config.yaml";
-	std::string configFilePath = ament_index_cpp::get_package_share_directory("nora") + "/../../configuration/config.yaml"; 
+	std::string configFilePath = ament_index_cpp::get_package_share_directory("nora") + "/configuration/config.yaml"; 
 
 	createLogger();
 	auto configManager = ConfigManager::getInstance(); 
