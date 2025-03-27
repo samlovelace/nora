@@ -57,8 +57,9 @@ echo "🛠 Updating package.xml version for nora_idl..."
 update_package_xml_version "$WORKSPACE/src/nora_idl"
 
 echo "🛠 Generating Debian package for nora_idl..."
-mkdir -p "$WORKSPACE/src/nora_idl/.obj-x86_64-linux-gnu"
+#mkdir -p "$WORKSPACE/src/nora_idl/.obj-x86_64-linux-gnu"
 cd $WORKSPACE/src/nora_idl
+rm -rf debian
 bloom-generate rosdebian --os-name ubuntu --os-version jammy --ros-distro humble
 
 # ✅ Fix debian/compat and version before running fakeroot
@@ -87,8 +88,9 @@ echo "🛠 Updating package.xml version for nora..."
 update_package_xml_version "$WORKSPACE/src/nora"
 
 echo "🛠 Generating Debian package for nora..."
-mkdir -p "$WORKSPACE/src/nora/.obj-x86_64-linux-gnu"
+#mkdir -p "$WORKSPACE/src/nora/.obj-x86_64-linux-gnu"
 cd $WORKSPACE/src/nora
+rm -rf debian
 bloom-generate rosdebian --os-name ubuntu --os-version jammy --ros-distro humble
 
 # ✅ Fix debian/compat and version before running fakeroot

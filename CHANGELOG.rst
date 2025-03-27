@@ -2,10 +2,13 @@
 Changelog
 ===========
 
-0.03 (2025-03-03)
------------------
-* updates debians.sh script to make the .obj-x86* dir that was causing issues
+0.0.4 (2025-03-26)
+------------------
+* testing new debeian build
 
+0.0.3 (2025-03-03)
+------------------
+* updates debians.sh script to make the .obj-x86* dir that was causing issues
 
 0.0.2 (2025-03-03)
 ------------------
