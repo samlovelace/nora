@@ -30,15 +30,4 @@ debian/.debhelper/
 debian/ros-humble-nora
 
 # 🔹 Ignore bloom-generated Debian files (which should be re-generated each build)
-#debian/
-
-# 🔹 Keep essential Debian packaging files
-!debian/control
-!debian/rules
-!debian/changelog
-!debian/compat
-!debian/copyright
-!debian/source/format
-
-
-
+debian/
