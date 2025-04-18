@@ -18,6 +18,9 @@
 #include <direct.h>
 #else
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <pwd.h>
 #endif
 
 namespace fs = std::filesystem;
@@ -41,12 +44,22 @@ void createLogger() {
     auto now_time_t = std::chrono::system_clock::to_time_t(now);
     auto seconds = std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()) % 60;
 
+    struct passwd *pw = getpwuid(getuid());
+    if (pw == nullptr) {
+        std::cerr << "Failed to get username.\n";
+        return;
+    }
+    std::string username = pw->pw_name;
+
+    // Directory path
+    std::string dirPath = "/home/" + username + "/testing/";
+
     // Create "testing" directory if it doesn't already exist
-    createDirectory("../../testing");
+    createDirectory(dirPath);
 
     // Format date in YYYY_MM_DD
     std::ostringstream dateSS;
-    dateSS << "../testing/test_" << std::put_time(std::localtime(&now_time_t), "%Y_%m_%d");
+    dateSS << dirPath + "/test_" << std::put_time(std::localtime(&now_time_t), "%Y_%m_%d");
     std::string directoryName = dateSS.str();
 
     // Create directory if it doesn't already exist
