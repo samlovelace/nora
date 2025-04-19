@@ -5,26 +5,18 @@
 OptitrackStateFetcher::OptitrackStateFetcher(NetworkConfig aConfig) : 
         mNatNetClient(nullptr), mConfig(aConfig), mID(1)
 {
-    ////// HACK FOR TESTING 
-    dummyState();  
-}
-
-OptitrackStateFetcher::~OptitrackStateFetcher()
-{
-    
-}
-
-void OptitrackStateFetcher::dummyState()
-{
     Eigen::Matrix<double, 13, 1> state;
     for(int j = 0; j < 12; j++)
     {
         state[j] = 0.0;
     }
 
-    LOGD << "state: " << state; 
     setLatestState(state);
+ 
+}
 
+OptitrackStateFetcher::~OptitrackStateFetcher()
+{
 }
 
 bool OptitrackStateFetcher::init() 
@@ -78,7 +70,6 @@ Eigen::Matrix<double, 13, 1> OptitrackStateFetcher::fetchState()
     return mLatestState; 
 }
 
-// TODO: calculate lin/ang velocity
 void OptitrackStateFetcher::frameRecvdCallback(sFrameOfMocapData* data, void* pUserData)
 {
     auto dt = std::chrono::steady_clock::now() - mPrevRecvdTime; 
@@ -87,12 +78,7 @@ void OptitrackStateFetcher::frameRecvdCallback(sFrameOfMocapData* data, void* pU
     {
         if(data->RigidBodies[i].ID == mID)
         {
-            ////////// TODO: Dummy values for most of these, implement actual calcuation
             Eigen::Matrix<double, 13, 1> state;
-            for(int j = 0; j < 12; j++)
-            {
-                state[j] = 0.0;
-            }
 
             // rigid body data from OptiTrack
             auto rb = data->RigidBodies[i]; 

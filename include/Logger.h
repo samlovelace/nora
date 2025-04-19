@@ -69,7 +69,7 @@ void createLogger() {
     std::ostringstream timeSS;
     timeSS << std::put_time(std::localtime(&now_time_t), "%H_%M_") << std::setw(2) << std::setfill('0') << seconds.count();
     std::string logFileName = "NORA_Log_" + timeSS.str() + ".csv";
-    std::string datalogFileName = "ABV_Controller_DataLog_" + timeSS.str() + ".csv";
+    //std::string datalogFileName = "NORA_DataLog_" + timeSS.str() + ".csv";
 
     // Full paths for log files
     std::string logFilePath = directoryName + "/" + logFileName;
@@ -81,7 +81,7 @@ void createLogger() {
     plog::init(plog::verbose, &fileAppender).addAppender(&consoleAppender);  // Initialize the logger with both appenders.
 
     // Initialize a separate logger for the data log file
-    //static plog::RollingFileAppender<plog::TxtFormatter> dataFileAppender(datalogFilePath.c_str());
+    //static plog::RollingFileAppender<plog::CsvFormatter> dataFileAppender(datalogFilePath.c_str());
     //plog::init<1>(plog::verbose, &dataFileAppender);  // Use a separate instance for the data log
 
     // Log the creation of the data log file

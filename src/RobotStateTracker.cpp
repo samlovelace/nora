@@ -68,17 +68,18 @@ void RobotStateTracker::run()
     if(!mStateFetcher->init())
     {
         LOGE << "Could not initialize state fetcher of type: " << mConfig.mStateTrackerConfig.mInterface; 
-        //return; 
+        return; 
     }
+
+    // log pose key 
+    LOGD << "(state) id [x y z vx vy vz qw qx qy qz wx wy wz]";
 
     while(doStateTracking())
     {
         auto start = std::chrono::steady_clock::now(); 
-
-        LOGD << "Fetching robot state..."; 
-        Eigen::Matrix<double, 13,1> state = mStateFetcher->fetchState();   
-        // TODO: log state to file (timestamp rigidBodyId x y z ...)
-
+ 
+        Eigen::Matrix<double, 13,1> state = mStateFetcher->fetchState();  
+        LOGD << "(state) " << mConfig.rigid_body_id << " " << state;
         statePublisher->publish(toIDL(state)); 
 
         // Calculate the time taken for the loop iteration
